@@ -33,6 +33,7 @@ jobs:
       # Apply DB migrations to Supabase (safe for prod)
       - name: Deploy Prisma migrations
         run: npx prisma migrate deploy
+        timeout-minutes: 3
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
