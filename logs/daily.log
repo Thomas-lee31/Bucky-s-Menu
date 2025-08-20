@@ -1,0 +1,12 @@
+
+> job:daily
+> tsx scripts/dailyMenuJob.ts
+
+Menu data for Mon Aug 25 2025 has been added.
+Menu data initialization completed.
+
+> job:daily
+> tsx scripts/dailyMenuJob.ts
+
+Menu data for Sun Aug 24 2025 has been added.
+Menu data initialization completed.
