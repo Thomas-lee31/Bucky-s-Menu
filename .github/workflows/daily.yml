@@ -1,9 +1,10 @@
 name: Daily Menu Job
 
 on:
-  # Run once daily (cron is in UTC; 09:00 UTC = 04:00 Central Time)
+  # Run once daily at 4:00 AM Central Time (10:00 UTC during DST, 9:00 UTC during standard time)
+  # Using 10:00 UTC to account for Central Daylight Time
   schedule:
-    - cron: "0 9 * * *"
+    - cron: "0 10 * * *"
   # Allow manual runs from the GitHub UI
   workflow_dispatch: {}
 
@@ -40,6 +41,7 @@ jobs:
       # Run your daily job (uses tsx)
       - name: Run daily menu job
         run: npm run job:daily
+        timeout-minutes: 5
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           # SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
