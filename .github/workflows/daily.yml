@@ -19,10 +19,10 @@ jobs:
       - name: Check out repo
         uses: actions/checkout@v4
 
-      - name: Use Node.js 20
+      - name: Use Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
 
       - name: Install dependencies
@@ -31,33 +31,7 @@ jobs:
       - name: Generate Prisma Client
         run: npx prisma generate
 
-      # Test connection
-      - name: Test database connection
-        run: |
-          echo "Testing transaction pooler connectivity..."
-          timeout 30 bash -c "</dev/tcp/aws-1-us-east-2.pooler.supabase.com/6543" && echo "Transaction pooler (port 6543) is reachable" || echo "Transaction pooler is NOT reachable"
-        continue-on-error: true
-
-      # Run your daily job (uses tsx)
       - name: Run daily menu job
         run: npm run job:daily
-        timeout-minutes: 5
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          # SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
-          # Add more envs as needed, e.g. NUTRISLICE_BASE, etc.
-
-      # (Nice-to-have) Upload a log/summary artifact
-      - name: Save job summary
-        if: always()
-        run: |
-          echo "Run at: $(date -u)" >> job-summary.txt
-          echo "Node: $(node -v)" >> job-summary.txt
-          # If your script writes its own summary to a file, append it here.
-        shell: bash
-      - name: Upload summary artifact
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: daily-job-summary
-          path: job-summary.txt
