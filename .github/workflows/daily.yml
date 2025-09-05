@@ -31,20 +31,12 @@ jobs:
       - name: Generate Prisma Client
         run: npx prisma generate
 
-      # Test connection and deploy schema
+      # Test connection
       - name: Test database connection
         run: |
-          echo "Testing basic connectivity..."
-          timeout 30 bash -c "</dev/tcp/db.egwytzjayaviridmhrkb.supabase.co/5432" && echo "Port 5432 is reachable" || echo "Port 5432 is NOT reachable"
+          echo "Testing transaction pooler connectivity..."
+          timeout 30 bash -c "</dev/tcp/aws-1-us-east-2.pooler.supabase.com/6543" && echo "Transaction pooler (port 6543) is reachable" || echo "Transaction pooler is NOT reachable"
         continue-on-error: true
-        
-      - name: Deploy schema to Supabase
-        run: |
-          echo "Deploying schema..."
-          npx prisma db push --skip-generate --accept-data-loss
-        timeout-minutes: 5
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       # Run your daily job (uses tsx)
       - name: Run daily menu job

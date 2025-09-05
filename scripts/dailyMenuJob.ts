@@ -20,29 +20,26 @@ async function initializeMenuData() {
 
     const results = await Promise.all(fetchPromises);
 
-    const insertPromises: Promise<any>[] = [];
-
-    for (const menuItems of results) {
-      for (const menuItem of menuItems) {
-        insertPromises.push(
-          prisma.menuItem.create({
-            data: {
-              foodId: menuItem.foodId,
-              name: menuItem.name,
-              date: menuItem.date.toString(),
-              diningHall: menuItem.diningHall,
-              meal: menuItem.meal,
-            },
-          }).catch((error: any) => {
-            if (error.code !== 'P2002') {
-              console.error(`Error adding menu item: ${menuItem.name} on ${menuItem.date}`, error);
-            }
-          })
-        );
+    // Process items sequentially to avoid prepared statement issues with transaction pooler
+    const allMenuItems: MenuItem[] = results.flat();
+    
+    for (const menuItem of allMenuItems) {
+      try {
+        await prisma.menuItem.create({
+          data: {
+            foodId: menuItem.foodId,
+            name: menuItem.name,
+            date: menuItem.date.toString(),
+            diningHall: menuItem.diningHall,
+            meal: menuItem.meal,
+          },
+        });
+      } catch (error: any) {
+        if (error.code !== 'P2002') {
+          console.error(`Error adding menu item: ${menuItem.name} on ${menuItem.date}`, error.message);
+        }
       }
     }
-
-    await Promise.all(insertPromises);
 
     console.log(`Menu data for ${currentDate.toDateString()} has been added.`);
 
