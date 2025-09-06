@@ -3,12 +3,12 @@ import { fetchMenuData, MenuItem } from '../utils/fetchMenuData.ts';
 
 const prisma = new PrismaClient();
 
-const diningHalls = ['gordon-avenue-market'] as const;
+const diningHalls = ['gordon-avenue-market', 'four-lakes-market', 'lizs-market', 'lowell-market', 'rhetas-market', 'carsons-market'] as const;
 const meals = ['breakfast', 'lunch', 'dinner'] as const;
 
 async function initializeMenuData() {
-  const startDate = new Date('2025-06-29');
-  const endDate = new Date();
+  const startDate = new Date('2025-08-27');
+  const endDate = new Date('2025-09-10');
   for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
     const fetchPromises: Promise<MenuItem[]>[] = [];
 
@@ -20,29 +20,26 @@ async function initializeMenuData() {
 
     const results = await Promise.all(fetchPromises);
 
-    const insertPromises: Promise<any>[] = [];
-
-    for (const menuItems of results) {
-      for (const menuItem of menuItems) {
-        insertPromises.push(
-          prisma.menuItem.create({
-            data: {
-              foodId: menuItem.foodId,
-              name: menuItem.name,
-              date: menuItem.date.toString(),
-              diningHall: menuItem.diningHall,
-              meal: menuItem.meal,
-            },
-          }).catch((error: any) => {
-            if (error.code !== 'P2002') {
-              console.error(`Error adding menu item: ${menuItem.name} on ${menuItem.date}`, error);
-            }
-          })
-        );
+    // Process items sequentially to avoid prepared statement issues with transaction pooler
+    const allMenuItems: MenuItem[] = results.flat();
+    
+    for (const menuItem of allMenuItems) {
+      try {
+        await prisma.menuItem.create({
+          data: {
+            foodId: menuItem.foodId,
+            name: menuItem.name,
+            date: menuItem.date.toString(),
+            diningHall: menuItem.diningHall,
+            meal: menuItem.meal,
+          },
+        });
+      } catch (error: any) {
+        if (error.code !== 'P2002') {
+          console.error(`Error adding menu item: ${menuItem.name} on ${menuItem.date}`, error.message);
+        }
       }
     }
-
-    await Promise.all(insertPromises);
 
     console.log(`Menu data for ${date.toDateString()} has been added.`);
   }

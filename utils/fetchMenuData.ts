@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 type MealType = 'breakfast' | 'lunch' | 'dinner';
-type DiningHall = 'gordon-avenue-market' | 'liz-waters-dining-hall' | 'four-lakes-market'; // add more as needed
+type DiningHall = 'gordon-avenue-market' | 'four-lakes-market' | 'lizs-market' | 'lowell-market' | 'rhetas-market' | 'carsons-market';
 
 export interface MenuItem {
     foodId: string;

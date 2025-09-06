@@ -3,7 +3,7 @@ import { fetchMenuData, MenuItem } from '../utils/fetchMenuData.ts';
 
 const prisma = new PrismaClient();
 
-const diningHalls = ['gordon-avenue-market'] as const;
+const diningHalls = ['gordon-avenue-market', 'four-lakes-market', 'lizs-market', 'lowell-market', 'rhetas-market', 'carsons-market'] as const;
 const meals = ['breakfast', 'lunch', 'dinner'] as const;
 
 async function initializeMenuData() {
