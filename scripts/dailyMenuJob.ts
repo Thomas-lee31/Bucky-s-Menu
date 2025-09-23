@@ -20,25 +20,23 @@ async function initializeMenuData() {
 
     const results = await Promise.all(fetchPromises);
 
-    // Process items sequentially to avoid prepared statement issues with transaction pooler
+    // Use createMany for better performance and to avoid prepared statement conflicts
     const allMenuItems: MenuItem[] = results.flat();
     
-    for (const menuItem of allMenuItems) {
-      try {
-        await prisma.menuItem.create({
-          data: {
-            foodId: menuItem.foodId,
-            name: menuItem.name,
-            date: menuItem.date.toString(),
-            diningHall: menuItem.diningHall,
-            meal: menuItem.meal,
-          },
-        });
-      } catch (error: any) {
-        if (error.code !== 'P2002') {
-          console.error(`Error adding menu item: ${menuItem.name} on ${menuItem.date}`, error.message);
-        }
-      }
+    try {
+      const result = await prisma.menuItem.createMany({
+        data: allMenuItems.map(item => ({
+          foodId: item.foodId,
+          name: item.name,
+          date: item.date.toString(),
+          diningHall: item.diningHall,
+          meal: item.meal,
+        })),
+        skipDuplicates: true
+      });
+      console.log(`Added ${result.count} new menu items (duplicates skipped)`);
+    } catch (error: any) {
+      console.error('Error adding menu items:', error.message);
     }
 
     console.log(`Menu data for ${currentDate.toDateString()} has been added.`);

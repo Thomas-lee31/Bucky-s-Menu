@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bucky's Menu - Food Notifications</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🍽️ Bucky's Menu</h1>
+            <p>Get notified when your favorite foods are available at UW dining halls</p>
+        </header>
+
+        <main>
+            <!-- Authentication Section -->
+            <section id="auth-section" class="auth-section">
+                <div class="auth-tabs">
+                    <button id="signin-tab" class="auth-tab active">Sign In</button>
+                    <button id="signup-tab" class="auth-tab">Sign Up</button>
+                </div>
+
+                <!-- Sign In Form -->
+                <form id="signin-form" class="auth-form">
+                    <h2>Welcome Back!</h2>
+                    <div class="form-group">
+                        <label for="signin-email">Email:</label>
+                        <input type="email" id="signin-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signin-password">Password:</label>
+                        <input type="password" id="signin-password" required>
+                    </div>
+                    <button type="submit" class="auth-btn">Sign In</button>
+                    <div class="auth-divider">or</div>
+                    <button type="button" id="google-signin" class="google-btn">
+                        Continue with Google
+                    </button>
+                </form>
+
+                <!-- Sign Up Form -->
+                <form id="signup-form" class="auth-form hidden">
+                    <h2>Create Account</h2>
+                    <div class="form-group">
+                        <label for="signup-email">Email:</label>
+                        <input type="email" id="signup-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-password">Password:</label>
+                        <input type="password" id="signup-password" minlength="6" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-confirm">Confirm Password:</label>
+                        <input type="password" id="signup-confirm" minlength="6" required>
+                    </div>
+                    <button type="submit" class="auth-btn">Create Account</button>
+                    <div class="auth-divider">or</div>
+                    <button type="button" id="google-signup" class="google-btn">
+                        Continue with Google
+                    </button>
+                </form>
+            </section>
+
+            <!-- User Dashboard (Hidden initially) -->
+            <div id="dashboard" class="hidden">
+                <!-- User Info Section -->
+                <section class="user-section">
+                    <div class="user-info">
+                        <h2>Welcome, <span id="user-email"></span>!</h2>
+                        <button id="signout-btn" class="secondary-btn">Sign Out</button>
+                    </div>
+                </section>
+
+            <!-- Food Search Section -->
+            <section class="search-section">
+                <h2>Subscribe to Food Notifications</h2>
+                <div class="search-container">
+                    <label for="food-search">Search for foods:</label>
+                    <input type="text" id="food-search" placeholder="Type to search foods (e.g., pizza, burger)..." autocomplete="off">
+                    <div id="search-results" class="search-results"></div>
+                </div>
+            </section>
+
+            <!-- Current Subscriptions Section -->
+            <section class="subscriptions-section">
+                <h2>Your Subscriptions</h2>
+                <div id="subscriptions-list" class="subscriptions-list">
+                    <p class="empty-state">Enter your email and click "Load My Subscriptions" to view your current subscriptions.</p>
+                </div>
+            </section>
+
+            <!-- Today's Menu Section -->
+            <section class="menu-section">
+                <h2>Today's Menu</h2>
+                <div class="menu-filters">
+                    <select id="dining-hall-filter">
+                        <option value="">All Dining Halls</option>
+                        <option value="gordon-avenue-market">Gordon Avenue Market</option>
+                        <option value="four-lakes-market">Four Lakes Market</option>
+                        <option value="lizs-market">Liz's Market</option>
+                        <option value="lowell-market">Lowell Market</option>
+                        <option value="rhetas-market">Rheta's Market</option>
+                        <option value="carsons-market">Carson's Market</option>
+                    </select>
+                    <select id="meal-filter">
+                        <option value="">All Meals</option>
+                        <option value="breakfast">Breakfast</option>
+                        <option value="lunch">Lunch</option>
+                        <option value="dinner">Dinner</option>
+                    </select>
+                    <button id="load-menu" class="secondary-btn">Load Today's Menu</button>
+                </div>
+                <div id="menu-list" class="menu-list">
+                    <p class="empty-state">Click "Load Today's Menu" to see what's available today.</p>
+                </div>
+            </section>
+            </div>
+        </main>
+
+        <!-- Loading Indicator -->
+        <div id="loading" class="loading hidden">
+            <div class="spinner"></div>
+            <span>Loading...</span>
+        </div>
+
+        <!-- Toast Messages -->
+        <div id="toast" class="toast hidden"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
+    <script>
+        // Initialize Supabase client with config from server
+        async function initSupabase() {
+            try {
+                console.log('Fetching Supabase config...');
+                const response = await fetch('/api/config');
+                const config = await response.json();
+                console.log('Config received:', { hasUrl: !!config.supabaseUrl, hasKey: !!config.supabaseAnonKey });
+
+                if (config.supabaseUrl && config.supabaseAnonKey) {
+                    window.supabase = supabase.createClient(config.supabaseUrl, config.supabaseAnonKey);
+                    console.log('✅ Supabase client initialized successfully');
+
+                    // Trigger app initialization after Supabase is ready
+                    if (window.app) {
+                        window.app.checkAuthOnLoad();
+                    }
+                } else {
+                    console.warn('❌ Supabase config not available');
+                }
+            } catch (error) {
+                console.error('❌ Failed to load Supabase config:', error);
+            }
+        }
+
+        // Initialize when page loads
+        initSupabase();
+    </script>
+    <script src="app.js"></script>
+</body>
+</html>

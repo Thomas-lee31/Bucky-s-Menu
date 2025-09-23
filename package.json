@@ -5,9 +5,20 @@
   },
   "dependencies": {
     "@prisma/client": "^6.13.0",
-    "axios": "^1.11.0"
+    "@supabase/supabase-js": "^2.57.4",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/nodemailer": "^7.0.1",
+    "axios": "^1.11.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "nodemailer": "^7.0.6"
   },
   "scripts": {
-    "job:daily": "tsx scripts/dailyMenuJob.ts"
+    "job:daily": "tsx scripts/dailyMenuJob.ts",
+    "job:notifications": "tsx scripts/notificationJob.ts",
+    "test:notifications": "tsx scripts/testNotifications.ts",
+    "api:dev": "tsx --watch api/server.ts",
+    "api:start": "tsx api/server.ts"
   }
 }

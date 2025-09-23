@@ -1,0 +1,582 @@
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header */
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    color: white;
+}
+
+header h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+header p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+/* Main Content */
+main {
+    display: grid;
+    gap: 30px;
+    grid-template-columns: 1fr;
+}
+
+/* Section Styles */
+section {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+}
+
+section:hover {
+    transform: translateY(-5px);
+}
+
+section h2 {
+    color: #c5050c;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    border-bottom: 2px solid #c5050c;
+    padding-bottom: 10px;
+}
+
+/* Authentication Section */
+.auth-section {
+    background: linear-gradient(135deg, #c5050c, #e74c3c);
+    color: white;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.auth-tabs {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.auth-tab {
+    flex: 1;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.auth-tab.active {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.auth-tab:first-child {
+    border-radius: 8px 0 0 8px;
+}
+
+.auth-tab:last-child {
+    border-radius: 0 8px 8px 0;
+}
+
+.auth-form h2 {
+    color: white;
+    border-bottom: 2px solid white;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: white;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 8px;
+    transition: box-shadow 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+.auth-btn {
+    width: 100%;
+    background: white;
+    color: #c5050c;
+    padding: 15px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.auth-btn:hover {
+    background: #f8f9fa;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.auth-divider {
+    text-align: center;
+    margin: 20px 0;
+    position: relative;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.auth-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.3);
+    z-index: 1;
+}
+
+.auth-divider::after {
+    content: 'or';
+    background: #c5050c;
+    padding: 0 15px;
+    position: relative;
+    z-index: 2;
+}
+
+.google-btn {
+    width: 100%;
+    background: white;
+    color: #333;
+    padding: 15px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.google-btn:hover {
+    background: #f8f9fa;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.google-btn::before {
+    content: '🔵';
+    font-size: 1.2rem;
+}
+
+/* User Section */
+.user-section {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+}
+
+.user-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.user-info h2 {
+    color: white;
+    border-bottom: 2px solid white;
+    margin: 0;
+}
+
+.user-info button {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 2px solid white;
+}
+
+.user-info button:hover {
+    background: white;
+    color: #28a745;
+}
+
+/* Form Elements */
+input, select, button {
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+input[type="text"], input[type="email"], select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus, input[type="email"]:focus, select:focus {
+    outline: none;
+    border-color: #c5050c;
+    box-shadow: 0 0 0 3px rgba(197, 5, 12, 0.1);
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #555;
+}
+
+/* Buttons */
+button {
+    background: #c5050c;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: #a00409;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(197, 5, 12, 0.3);
+}
+
+.secondary-btn {
+    background: #6c757d;
+}
+
+.secondary-btn:hover {
+    background: #5a6268;
+}
+
+.small {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+}
+
+/* Search Container */
+.search-container {
+    position: relative;
+}
+
+.search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.search-result-item {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.2s ease;
+}
+
+.search-result-item:hover {
+    background-color: #f8f9fa;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.food-name {
+    flex: 1;
+    font-weight: 500;
+}
+
+.subscribe-btn {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    margin-left: 10px;
+}
+
+/* Subscriptions List */
+.subscriptions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.subscription-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #c5050c;
+}
+
+.subscription-info {
+    flex: 1;
+}
+
+.subscription-info .food-name {
+    display: block;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.subscription-date {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.unsubscribe-btn {
+    background: #dc3545;
+    padding: 8px 16px;
+    font-size: 0.9rem;
+}
+
+.unsubscribe-btn:hover {
+    background: #c82333;
+}
+
+/* Menu Section */
+.menu-filters {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.menu-filters select {
+    flex: 1;
+    min-width: 200px;
+}
+
+.menu-list {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.menu-group {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.menu-group h3 {
+    background: #c5050c;
+    color: white;
+    padding: 15px;
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.menu-items {
+    padding: 15px;
+    display: grid;
+    gap: 10px;
+}
+
+.menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+}
+
+.menu-item:hover {
+    background: #e9ecef;
+}
+
+/* Loading Indicator */
+.loading {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    z-index: 2000;
+}
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #c5050c;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Toast Messages */
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 600;
+    z-index: 2000;
+    min-width: 300px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.toast.success {
+    background: #28a745;
+}
+
+.toast.error {
+    background: #dc3545;
+}
+
+.toast.warning {
+    background: #ffc107;
+    color: #333;
+}
+
+.toast.info {
+    background: #17a2b8;
+}
+
+/* Utility Classes */
+.hidden {
+    display: none !important;
+}
+
+.empty-state {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    padding: 40px 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    header h1 {
+        font-size: 2rem;
+    }
+
+    section {
+        padding: 20px;
+    }
+
+    .menu-filters {
+        flex-direction: column;
+    }
+
+    .menu-filters select {
+        min-width: auto;
+    }
+
+    .subscription-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .search-result-item, .menu-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .search-result-item .subscribe-btn,
+    .menu-item .subscribe-btn {
+        margin-left: 0;
+        align-self: flex-end;
+    }
+
+    .toast {
+        right: 15px;
+        left: 15px;
+        min-width: auto;
+    }
+}
+
+@media (min-width: 768px) {
+    main {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .email-section,
+    .menu-section {
+        grid-column: 1 / -1;
+    }
+}

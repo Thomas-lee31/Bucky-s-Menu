@@ -15,6 +15,7 @@ datasource db {
 
 model User {
   id             String          @id @default(cuid())
+  supabaseId     String?         @unique
   email          String          @unique
   subscriptions  Subscription[]
   createdAt      DateTime        @default(now())
@@ -37,5 +38,10 @@ model Subscription {
   user        User     @relation(fields: [userId], references: [id])
   userId      String
   foodId      String   
+  foodName    String
+  isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
+
+  @@unique([userId, foodId])
+  @@index([foodId])
 }
