@@ -390,7 +390,10 @@ class BuckyMenuApp {
 
         const resultsHtml = foods.map(food => `
             <div class="search-result-item" data-food-id="${food.foodId}" data-food-name="${food.name}">
-                <span class="food-name">${food.name}</span>
+                <div class="food-info">
+                    <span class="food-name clickable" onclick="app.viewFoodHistory('${food.foodId}')" title="View history for ${food.name}">${food.name}</span>
+                    <span class="appearance-count">${food.totalAppearances} appearances</span>
+                </div>
                 <button class="subscribe-btn" onclick="app.subscribeToFood('${food.foodId}', '${food.name.replace(/'/g, "\\'")}')">
                     Subscribe
                 </button>
@@ -481,7 +484,7 @@ class BuckyMenuApp {
         const subscriptionsHtml = subscriptions.map(sub => `
             <div class="subscription-item">
                 <div class="subscription-info">
-                    <span class="food-name">${sub.foodName}</span>
+                    <span class="food-name clickable" onclick="app.viewFoodHistory('${sub.foodId}')" title="View history for ${sub.foodName}">${sub.foodName}</span>
                     <span class="subscription-date">Subscribed: ${new Date(sub.createdAt).toLocaleDateString()}</span>
                 </div>
                 <button class="unsubscribe-btn" onclick="app.unsubscribeFromFood('${sub.foodId}', '${sub.foodName.replace(/'/g, "\\'")}')">
@@ -589,7 +592,7 @@ class BuckyMenuApp {
                     <div class="menu-items">
                         ${group.items.map(item => `
                             <div class="menu-item">
-                                <span class="food-name">${item.name}</span>
+                                <span class="food-name clickable" onclick="app.viewFoodHistory('${item.foodId}')" title="View history for ${item.name}">${item.name}</span>
                                 ${this.currentUser ? `<button class="subscribe-btn small" onclick="app.subscribeToFood('${item.foodId}', '${item.name.replace(/'/g, "\\'")}')">Subscribe</button>` : ''}
                             </div>
                         `).join('')}
@@ -630,6 +633,10 @@ class BuckyMenuApp {
         setTimeout(() => {
             toast.classList.add('hidden');
         }, 4000);
+    }
+
+    viewFoodHistory(foodId) {
+        window.open(`/food-history.html?foodId=${encodeURIComponent(foodId)}`, '_blank');
     }
 }
 

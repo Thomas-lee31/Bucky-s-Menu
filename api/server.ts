@@ -273,8 +273,8 @@ app.get('/api/foods/search', async (req, res) => {
       return res.json([]);
     }
 
-    // Search for unique food names that contain the query (case insensitive)
-    const foods = await prisma.menuItem.findMany({
+    // Get unique foods first, then get counts for each
+    const uniqueFoods = await prisma.menuItem.findMany({
       where: {
         name: {
           contains: q,
@@ -285,11 +285,29 @@ app.get('/api/foods/search', async (req, res) => {
         foodId: true,
         name: true
       },
-      distinct: ['foodId'],
-      take: 20
+      distinct: ['foodId']
     });
 
-    res.json(foods);
+    // Get counts for each food and sort by count
+    const foodsWithCounts = await Promise.all(
+      uniqueFoods.map(async (food) => {
+        const count = await prisma.menuItem.count({
+          where: { foodId: food.foodId }
+        });
+        return {
+          foodId: food.foodId,
+          name: food.name,
+          totalAppearances: count
+        };
+      })
+    );
+
+    // Sort by total appearances descending and limit to 20
+    const formattedFoods = foodsWithCounts
+      .sort((a, b) => b.totalAppearances - a.totalAppearances)
+      .slice(0, 20);
+
+    res.json(formattedFoods);
   } catch (error) {
     console.error('Error searching foods:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -318,6 +336,105 @@ app.get('/api/menu/today', async (req, res) => {
     res.json(menuItems);
   } catch (error) {
     console.error('Error getting today\'s menu:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Get food history by foodId
+app.get('/api/food/:foodId/history', async (req, res) => {
+  try {
+    const { foodId } = req.params;
+    const { limit = '30', offset = '0' } = req.query;
+
+    if (!foodId) {
+      return res.status(400).json({ error: 'Food ID is required' });
+    }
+
+    const today = new Date().toISOString().split('T')[0];
+
+    // Get food history with pagination (past only, excluding today)
+    const history = await prisma.menuItem.findMany({
+      where: {
+        foodId,
+        date: { lt: today }
+      },
+      orderBy: { date: 'desc' },
+      take: parseInt(limit as string),
+      skip: parseInt(offset as string),
+      select: {
+        id: true,
+        foodId: true,
+        name: true,
+        diningHall: true,
+        meal: true,
+        date: true,
+        createdAt: true
+      }
+    });
+
+    // Get next appearance (today and future)
+    const nextAppearance = await prisma.menuItem.findFirst({
+      where: {
+        foodId,
+        date: { gte: today }
+      },
+      orderBy: { date: 'asc' },
+      select: {
+        date: true,
+        diningHall: true,
+        meal: true
+      }
+    });
+
+    // Get upcoming appearances (today and future appearances, limited)
+    const upcomingAppearances = await prisma.menuItem.findMany({
+      where: {
+        foodId,
+        date: { gte: today }
+      },
+      orderBy: { date: 'asc' },
+      take: 20, // Limit to next 20 appearances
+      select: {
+        id: true,
+        foodId: true,
+        name: true,
+        diningHall: true,
+        meal: true,
+        date: true,
+        createdAt: true
+      }
+    });
+
+    // Get total count for pagination (past only)
+    const totalCount = await prisma.menuItem.count({
+      where: {
+        foodId,
+        date: { lt: today }
+      }
+    });
+
+    // Get unique food name (should be consistent across all records)
+    const foodName = history.length > 0
+      ? history[0].name
+      : upcomingAppearances.length > 0
+        ? upcomingAppearances[0].name
+        : 'Unknown Food';
+
+    res.json({
+      foodId,
+      foodName,
+      history,
+      nextAppearance,
+      upcomingAppearances,
+      pagination: {
+        total: totalCount,
+        limit: parseInt(limit as string),
+        offset: parseInt(offset as string),
+        hasMore: totalCount > parseInt(offset as string) + parseInt(limit as string)
+      }
+    });
+  } catch (error) {
+    console.error('Error getting food history:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

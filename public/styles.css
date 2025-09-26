@@ -336,6 +336,19 @@ button:hover {
     font-weight: 500;
 }
 
+.food-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 4px;
+}
+
+.appearance-count {
+    font-size: 0.85em;
+    color: #666;
+    font-weight: normal;
+}
+
 .subscribe-btn {
     padding: 6px 12px;
     font-size: 0.9rem;
@@ -436,6 +449,18 @@ button:hover {
 
 .menu-item:hover {
     background: #e9ecef;
+}
+
+.clickable {
+    cursor: pointer;
+    color: #c5050c;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.clickable:hover {
+    color: #a00409;
+    text-decoration: underline;
 }
 
 /* Loading Indicator */
