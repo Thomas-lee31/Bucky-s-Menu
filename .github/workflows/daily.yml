@@ -1,4 +1,4 @@
-name: Daily Menu Job
+name: Daily Menu Fetch Job
 
 on:
   # Run once daily at 4:00 AM Central Time (10:00 UTC during DST, 9:00 UTC during standard time)
@@ -12,7 +12,7 @@ permissions:
   contents: read
 
 jobs:
-  run-daily:
+  fetch-menu:
     runs-on: ubuntu-latest
 
     steps:
@@ -31,17 +31,7 @@ jobs:
       - name: Generate Prisma Client
         run: npx prisma generate
 
-      - name: Run daily menu job
+      - name: Run daily menu fetch job
         run: npm run job:daily
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-
-      - name: Send email notifications
-        run: npx tsx scripts/notificationJob.ts
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          SMTP_HOST: ${{ secrets.SMTP_HOST }}
-          SMTP_PORT: ${{ secrets.SMTP_PORT }}
-          SMTP_USER: ${{ secrets.SMTP_USER }}
-          SMTP_PASS: ${{ secrets.SMTP_PASS }}
-          SMTP_FROM: ${{ secrets.SMTP_FROM }}

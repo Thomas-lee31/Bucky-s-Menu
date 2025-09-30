@@ -225,6 +225,29 @@ section h2 {
     margin: 0;
 }
 
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.settings-link {
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
+    border: 2px solid white;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.settings-link:hover {
+    background: white;
+    color: #28a745;
+    transform: translateY(-2px);
+}
+
 .user-info button {
     background: rgba(255, 255, 255, 0.2);
     color: white;
@@ -353,6 +376,16 @@ button:hover {
     padding: 6px 12px;
     font-size: 0.9rem;
     margin-left: 10px;
+}
+
+.search-info {
+    margin-top: 15px;
+    padding: 12px;
+    background: #f8f9fa;
+    border-left: 4px solid #17a2b8;
+    border-radius: 6px;
+    color: #666;
+    font-style: italic;
 }
 
 /* Subscriptions List */
@@ -534,6 +567,191 @@ button:hover {
 
 .toast.info {
     background: #17a2b8;
+}
+
+/* Settings Page Styles */
+.header-nav {
+    margin-top: 15px;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateX(-3px);
+}
+
+.settings-section {
+    margin-bottom: 30px;
+}
+
+.settings-section h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    margin-bottom: 15px;
+    font-weight: normal;
+}
+
+.checkbox-label input[type="checkbox"] {
+    display: none;
+}
+
+.checkmark {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkmark {
+    background: #c5050c;
+    border-color: #c5050c;
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkmark::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+/* Notification Toggle Styles */
+.notification-toggle {
+    margin: 20px 0 30px 0;
+}
+
+.toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    cursor: pointer;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border: 2px solid #eee;
+    transition: all 0.3s ease;
+}
+
+.toggle-label:hover {
+    border-color: #c5050c;
+    background: #fff;
+}
+
+.toggle-label input[type="checkbox"] {
+    display: none;
+}
+
+.toggle-slider {
+    position: relative;
+    width: 60px;
+    height: 30px;
+    background: #ccc;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: white;
+    top: 2px;
+    left: 2px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.toggle-label input[type="checkbox"]:checked + .toggle-slider {
+    background: #28a745;
+}
+
+.toggle-label input[type="checkbox"]:checked + .toggle-slider::before {
+    transform: translateX(30px);
+}
+
+.toggle-text {
+    flex: 1;
+}
+
+.toggle-text strong {
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.toggle-text small {
+    color: #666;
+    font-style: italic;
+}
+
+.checkbox-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.form-help {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 5px;
+    font-style: italic;
+}
+
+.time-range {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.time-separator {
+    color: #666;
+    font-weight: 500;
+}
+
+.settings-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid #eee;
+}
+
+.primary-btn {
+    background: #28a745;
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.primary-btn:hover {
+    background: #218838;
 }
 
 /* Utility Classes */

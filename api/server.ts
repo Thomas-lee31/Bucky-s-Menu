@@ -14,6 +14,12 @@ const authService = new AuthService();
 app.use(cors());
 app.use(express.json());
 
+// Debug middleware to log all requests
+app.use((req, res, next) => {
+  console.log(`🌐 ${req.method} ${req.path}`);
+  next();
+});
+
 // Serve static files from public directory
 app.use(express.static(path.join(__dirname, '../public')));
 
@@ -273,41 +279,25 @@ app.get('/api/foods/search', async (req, res) => {
       return res.json([]);
     }
 
-    // Get unique foods first, then get counts for each
-    const uniqueFoods = await prisma.menuItem.findMany({
-      where: {
-        name: {
-          contains: q,
-          mode: 'insensitive'
-        }
-      },
-      select: {
-        foodId: true,
-        name: true
-      },
-      distinct: ['foodId']
-    });
+    // Use raw SQL to get foods with appearance counts, filtered by name
+    const foods = await prisma.$queryRaw`
+      SELECT
+        "foodId",
+        "name",
+        COUNT(*) as "totalAppearances"
+      FROM "MenuItem"
+      WHERE LOWER("name") LIKE LOWER(${'%' + q + '%'})
+      GROUP BY "foodId", "name"
+      LIMIT 20
+    `;
 
-    // Get counts for each food and sort by count
-    const foodsWithCounts = await Promise.all(
-      uniqueFoods.map(async (food) => {
-        const count = await prisma.menuItem.count({
-          where: { foodId: food.foodId }
-        });
-        return {
-          foodId: food.foodId,
-          name: food.name,
-          totalAppearances: count
-        };
-      })
-    );
+    // Convert BigInt to number for JSON serialization
+    const serializedFoods = (foods as any[]).map(food => ({
+      ...food,
+      totalAppearances: Number(food.totalAppearances)
+    }));
 
-    // Sort by total appearances descending and limit to 20
-    const formattedFoods = foodsWithCounts
-      .sort((a, b) => b.totalAppearances - a.totalAppearances)
-      .slice(0, 20);
-
-    res.json(formattedFoods);
+    res.json(serializedFoods);
   } catch (error) {
     console.error('Error searching foods:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -435,6 +425,56 @@ app.get('/api/food/:foodId/history', async (req, res) => {
     });
   } catch (error) {
     console.error('Error getting food history:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Get user settings
+console.log('📝 Registering GET /api/settings route');
+app.get('/api/settings', requireAuth, async (req: any, res) => {
+  try {
+    const settings = await prisma.userSettings.findUnique({
+      where: { userId: req.user.id }
+    });
+
+    if (!settings) {
+      // Return default settings if none exist
+      return res.json({
+        emailNotifications: true
+      });
+    }
+
+    res.json({
+      emailNotifications: settings.emailNotifications
+    });
+  } catch (error) {
+    console.error('Error getting user settings:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Update user settings
+console.log('📝 Registering PUT /api/settings route');
+app.put('/api/settings', requireAuth, async (req: any, res) => {
+  try {
+    const { emailNotifications } = req.body;
+
+    const settings = await prisma.userSettings.upsert({
+      where: { userId: req.user.id },
+      update: {
+        emailNotifications: emailNotifications ?? undefined
+      },
+      create: {
+        userId: req.user.id,
+        emailNotifications: emailNotifications ?? true
+      }
+    });
+
+    res.json({
+      emailNotifications: settings.emailNotifications
+    });
+  } catch (error) {
+    console.error('Error updating user settings:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

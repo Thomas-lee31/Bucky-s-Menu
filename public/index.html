@@ -14,6 +14,17 @@
         </header>
 
         <main>
+            <!-- Food Search Section (Always Visible) -->
+            <section class="search-section">
+                <h2>Search for Foods</h2>
+                <div class="search-container">
+                    <label for="food-search">Search for foods:</label>
+                    <input type="text" id="food-search" placeholder="Type to search foods (e.g., pizza, burger)..." autocomplete="off">
+                    <div id="search-results" class="search-results"></div>
+                </div>
+                <p class="search-info">Sign in to subscribe to your favorite foods and get notified when they're available!</p>
+            </section>
+
             <!-- Authentication Section -->
             <section id="auth-section" class="auth-section">
                 <div class="auth-tabs">
@@ -68,19 +79,12 @@
                 <section class="user-section">
                     <div class="user-info">
                         <h2>Welcome, <span id="user-email"></span>!</h2>
-                        <button id="signout-btn" class="secondary-btn">Sign Out</button>
+                        <div class="user-actions">
+                            <a href="/settings.html" class="settings-link">⚙️ Settings</a>
+                            <button id="signout-btn" class="secondary-btn">Sign Out</button>
+                        </div>
                     </div>
                 </section>
-
-            <!-- Food Search Section -->
-            <section class="search-section">
-                <h2>Subscribe to Food Notifications</h2>
-                <div class="search-container">
-                    <label for="food-search">Search for foods:</label>
-                    <input type="text" id="food-search" placeholder="Type to search foods (e.g., pizza, burger)..." autocomplete="off">
-                    <div id="search-results" class="search-results"></div>
-                </div>
-            </section>
 
             <!-- Current Subscriptions Section -->
             <section class="subscriptions-section">

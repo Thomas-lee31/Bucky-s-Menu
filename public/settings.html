@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Bucky's Menu</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚙️ Settings</h1>
+            <p>Customize your Bucky's Menu experience</p>
+            <nav class="header-nav">
+                <a href="/" class="nav-link">← Back to Home</a>
+            </nav>
+        </header>
+
+        <main>
+            <!-- Authentication Required Message -->
+            <section id="auth-required" class="auth-section">
+                <h2>Sign In Required</h2>
+                <p>Please <a href="/">sign in</a> to access your settings.</p>
+            </section>
+
+            <!-- Settings Dashboard -->
+            <div id="settings-dashboard" class="hidden">
+                <!-- User Info -->
+                <section class="user-section">
+                    <div class="user-info">
+                        <h2>Account: <span id="user-email"></span></h2>
+                        <button id="signout-btn" class="secondary-btn">Sign Out</button>
+                    </div>
+                </section>
+
+                <!-- Notification Settings -->
+                <section class="settings-section">
+                    <h2>🔔 Email Notifications</h2>
+                    <div class="notification-toggle">
+                        <label class="toggle-label">
+                            <input type="checkbox" id="email-notifications">
+                            <span class="toggle-slider"></span>
+                            <span class="toggle-text">
+                                <strong>Email notifications</strong>
+                                <br>
+                                <small>Get notified when your subscribed foods are available</small>
+                            </span>
+                        </label>
+                    </div>
+                    <div class="settings-actions">
+                        <button id="save-settings" class="primary-btn">💾 Save Settings</button>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Loading Indicator -->
+        <div id="loading" class="loading hidden">
+            <div class="spinner"></div>
+            <span>Saving...</span>
+        </div>
+
+        <!-- Toast Messages -->
+        <div id="toast" class="toast hidden"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.min.js"></script>
+    <script>
+        // Initialize Supabase client with config from server
+        async function initSupabase() {
+            try {
+                console.log('🔍 Fetching Supabase config...');
+                const response = await fetch('/api/config');
+                const config = await response.json();
+                console.log('📊 Config received:', { hasUrl: !!config.supabaseUrl, hasKey: !!config.supabaseAnonKey });
+
+                if (config.supabaseUrl && config.supabaseAnonKey) {
+                    window.supabase = supabase.createClient(config.supabaseUrl, config.supabaseAnonKey);
+                    console.log('✅ Supabase client initialized successfully');
+
+                    // Trigger settings app initialization after Supabase is ready
+                    if (window.settingsApp) {
+                        window.settingsApp.checkAuth();
+                    }
+                } else {
+                    console.warn('❌ Supabase config not available');
+                }
+            } catch (error) {
+                console.error('❌ Failed to load Supabase config:', error);
+            }
+        }
+
+        // Initialize when page loads
+        initSupabase();
+    </script>
+    <script src="settings.js"></script>
+</body>
+</html>

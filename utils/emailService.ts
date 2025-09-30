@@ -146,12 +146,13 @@ export class NotificationService {
     
     console.log(`Checking for menu notifications for ${dateString}...`);
 
-    // Get all active subscriptions
+    // Get all users with active subscriptions and their notification settings
     const users = await prisma.user.findMany({
       include: {
         subscriptions: {
           where: { isActive: true }
-        }
+        },
+        settings: true
       }
     });
 
@@ -159,6 +160,13 @@ export class NotificationService {
 
     for (const user of users) {
       if (user.subscriptions.length === 0) continue;
+
+      // Check if user has email notifications enabled (default to true if no settings exist)
+      const emailNotificationsEnabled = user.settings?.emailNotifications ?? true;
+      if (!emailNotificationsEnabled) {
+        console.log(`⏭️ Skipping ${user.email} - email notifications disabled`);
+        continue;
+      }
 
       // Find menu items that match user's subscriptions for today
       const matches: MenuMatch[] = [];

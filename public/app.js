@@ -388,17 +388,21 @@ class BuckyMenuApp {
             return;
         }
 
-        const resultsHtml = foods.map(food => `
-            <div class="search-result-item" data-food-id="${food.foodId}" data-food-name="${food.name}">
-                <div class="food-info">
-                    <span class="food-name clickable" onclick="app.viewFoodHistory('${food.foodId}')" title="View history for ${food.name}">${food.name}</span>
-                    <span class="appearance-count">${food.totalAppearances} appearances</span>
+        const resultsHtml = foods.map(food => {
+            const subscribeButton = this.currentUser
+                ? `<button class="subscribe-btn" onclick="app.subscribeToFood('${food.foodId}', '${food.name.replace(/'/g, "\\'")}')">Subscribe</button>`
+                : `<button class="subscribe-btn" onclick="app.promptSignIn('${food.name}')">Sign in to Subscribe</button>`;
+
+            return `
+                <div class="search-result-item" data-food-id="${food.foodId}" data-food-name="${food.name}">
+                    <div class="food-info">
+                        <span class="food-name clickable" onclick="app.viewFoodHistory('${food.foodId}')" title="View history for ${food.name}">${food.name}</span>
+                        <span class="appearance-count">${food.totalAppearances} appearances</span>
+                    </div>
+                    ${subscribeButton}
                 </div>
-                <button class="subscribe-btn" onclick="app.subscribeToFood('${food.foodId}', '${food.name.replace(/'/g, "\\'")}')">
-                    Subscribe
-                </button>
-            </div>
-        `).join('');
+            `;
+        }).join('');
 
         resultsContainer.innerHTML = resultsHtml;
         resultsContainer.classList.remove('hidden');
@@ -637,6 +641,16 @@ class BuckyMenuApp {
 
     viewFoodHistory(foodId) {
         window.open(`/food-history.html?foodId=${encodeURIComponent(foodId)}`, '_blank');
+    }
+
+    promptSignIn(foodName) {
+        this.showToast(`Sign in to subscribe to ${foodName} and get notifications when it's available!`, 'info');
+
+        // Scroll to auth section
+        const authSection = document.getElementById('auth-section');
+        if (authSection) {
+            authSection.scrollIntoView({ behavior: 'smooth' });
+        }
     }
 }
 

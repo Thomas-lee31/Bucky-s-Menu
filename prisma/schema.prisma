@@ -18,7 +18,20 @@ model User {
   supabaseId     String?         @unique
   email          String          @unique
   subscriptions  Subscription[]
+  settings       UserSettings?
   createdAt      DateTime        @default(now())
+}
+
+model UserSettings {
+  id                 String   @id @default(cuid())
+  user               User     @relation(fields: [userId], references: [id])
+  userId             String   @unique
+
+  // Notification preferences
+  emailNotifications Boolean  @default(true)
+
+  updatedAt          DateTime @updatedAt
+  createdAt          DateTime @default(now())
 }
 
 model MenuItem {
