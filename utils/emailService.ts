@@ -17,24 +17,44 @@ export interface UserNotification {
 }
 
 export class EmailService {
-  private transporter: nodemailer.Transporter;
+  private transporter: nodemailer.Transporter | null = null;
+  private isConfigured: boolean = false;
 
   constructor() {
+    // Check if SMTP configuration is available
+    const smtpUser = process.env.SMTP_USER;
+    const smtpPass = process.env.SMTP_PASS;
+
+    if (!smtpUser || !smtpPass) {
+      console.log('⚠️ SMTP credentials not configured - email notifications will be skipped');
+      this.isConfigured = false;
+      return;
+    }
+
     // Configure email transporter - you'll need to set these environment variables
     this.transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || 'smtp.gmail.com',
       port: parseInt(process.env.SMTP_PORT || '587'),
       secure: false, // true for 465, false for other ports
       auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
+        user: smtpUser,
+        pass: smtpPass,
       },
     });
+
+    this.isConfigured = true;
+    console.log('✅ SMTP configured successfully');
   }
 
   async sendNotification(notification: UserNotification) {
+    // Skip if SMTP is not configured
+    if (!this.isConfigured || !this.transporter) {
+      console.log(`📧 Skipping email to ${notification.email} - SMTP not configured`);
+      return false;
+    }
+
     const subject = `🍽️ Your favorite foods are available today!`;
-    
+
     const htmlContent = this.generateEmailHTML(notification);
     const textContent = this.generateEmailText(notification);
 

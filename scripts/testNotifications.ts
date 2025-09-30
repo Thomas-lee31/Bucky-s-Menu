@@ -40,8 +40,13 @@ async function testNotificationSystem() {
         
         if (testMenuItem) {
           console.log('Creating subscription for:', testMenuItem.name);
+          // Note: Using your actual email for testing to avoid bounce-backs
+          // Change this to your real email address when testing
+          const testEmail = process.env.TEST_EMAIL || 'your-email@example.com';
+          console.log(`Using test email: ${testEmail}`);
+
           await subscriptionService.createSubscription({
-            email: 'test-notifications@wisc.edu',
+            email: testEmail,
             foodId: testMenuItem.foodId,
             foodName: testMenuItem.name
           });
@@ -57,8 +62,13 @@ async function testNotificationSystem() {
       const testMenuItem = todayMenuItems[0];
       console.log('Creating subscription for today\'s item:', testMenuItem.name);
       
+      // Note: Using your actual email for testing to avoid bounce-backs
+      // Change this to your real email address when testing
+      const testEmail = process.env.TEST_EMAIL || 'your-email@example.com';
+      console.log(`Using test email: ${testEmail}`);
+
       await subscriptionService.createSubscription({
-        email: 'test-notifications@wisc.edu',
+        email: testEmail,
         foodId: testMenuItem.foodId,
         foodName: testMenuItem.name
       });
@@ -71,8 +81,9 @@ async function testNotificationSystem() {
 
     // Step 3: Show what would happen without actually sending emails
     console.log('\n3. Testing notification logic (dry run)...');
+    const testEmail = process.env.TEST_EMAIL || 'your-email@example.com';
     const users = await prisma.user.findMany({
-      where: { email: 'test-notifications@wisc.edu' },
+      where: { email: testEmail },
       include: {
         subscriptions: {
           where: { isActive: true }
