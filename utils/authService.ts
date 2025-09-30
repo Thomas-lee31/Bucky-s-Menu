@@ -122,12 +122,7 @@ export class AuthService {
 
   async signOut(accessToken: string): Promise<{ error: string | null }> {
     try {
-      // Set the session for this request
-      await this.supabase.auth.setSession({
-        access_token: accessToken,
-        refresh_token: '', // We only need access token for signOut
-      });
-
+      // Simply call signOut - Supabase will handle invalidating the token
       const { error } = await this.supabase.auth.signOut();
 
       if (error) {

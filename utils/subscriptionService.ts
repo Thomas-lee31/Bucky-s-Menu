@@ -18,20 +18,13 @@ export interface SubscriptionResponse {
 
 export class SubscriptionService {
   async createUser(email: string) {
-    try {
-      const user = await prisma.user.create({
-        data: { email }
-      });
-      return user;
-    } catch (error: any) {
-      if (error.code === 'P2002') {
-        const existingUser = await prisma.user.findUnique({
-          where: { email }
-        });
-        return existingUser;
-      }
-      throw error;
-    }
+    // Use upsert to atomically create or get the user, avoiding race conditions
+    const user = await prisma.user.upsert({
+      where: { email },
+      update: {}, // No updates needed if user exists
+      create: { email }
+    });
+    return user;
   }
 
   async createSubscription(data: CreateSubscriptionData): Promise<SubscriptionResponse> {

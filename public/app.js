@@ -9,11 +9,6 @@ class BuckyMenuApp {
     }
 
     async init() {
-        // Initialize Supabase client
-        const supabaseUrl = 'YOUR_SUPABASE_URL'; // We'll need to get this from env
-        const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'; // We'll need to get this from env
-
-        // For now, let's create a simple auth system that works with our backend
         this.bindEvents();
         this.checkAuthOnLoad();
     }
@@ -429,7 +424,6 @@ class BuckyMenuApp {
                     'Authorization': `Bearer ${this.accessToken}`
                 },
                 body: JSON.stringify({
-                    userId: this.currentUser.id,
                     foodId: foodId,
                     foodName: foodName
                 })
@@ -461,7 +455,7 @@ class BuckyMenuApp {
 
         try {
             this.showLoading(true);
-            const response = await fetch(`${this.apiUrl}/api/subscriptions?userId=${this.currentUser.id}`, {
+            const response = await fetch(`${this.apiUrl}/api/subscriptions`, {
                 headers: {
                     'Authorization': `Bearer ${this.accessToken}`
                 }
@@ -515,7 +509,6 @@ class BuckyMenuApp {
                     'Authorization': `Bearer ${this.accessToken}`
                 },
                 body: JSON.stringify({
-                    userId: this.currentUser.id,
                     foodId: foodId
                 })
             });

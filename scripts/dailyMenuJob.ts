@@ -8,9 +8,10 @@ const meals = ['breakfast', 'lunch', 'dinner'] as const;
 
 async function initializeMenuData() {
   const currentDate = new Date();
+  // Fetch menu data 4 days in advance to populate future menus
   currentDate.setDate(currentDate.getDate() + 4);
 
-    const fetchPromises: Promise<MenuItem[]>[] = [];
+  const fetchPromises: Promise<MenuItem[]>[] = [];
 
     for (const diningHall of diningHalls) {
       for (const meal of meals) {

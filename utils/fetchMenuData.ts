@@ -6,7 +6,7 @@ type DiningHall = 'gordon-avenue-market' | 'four-lakes-market' | 'lizs-market' |
 export interface MenuItem {
     foodId: string;
     name: string;
-    date: Date;
+    date: string;
     diningHall: string;
     meal: MealType;
 }
