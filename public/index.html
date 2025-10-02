@@ -4,9 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bucky's Menu - Food Notifications</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-brand">
+                <a href="/">🍽️ Bucky's Menu</a>
+            </div>
+            <div class="navbar-menu">
+                <div id="navbar-user" class="navbar-user hidden">
+                    <span id="navbar-email" class="navbar-email"></span>
+                    <a href="/settings.html" class="navbar-link">⚙️ Settings</a>
+                    <button id="navbar-signout" class="navbar-btn">Sign Out</button>
+                </div>
+                <div id="navbar-auth" class="navbar-auth">
+                    <button id="navbar-signin" class="navbar-btn-primary">Sign In</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
     <div class="container">
         <header>
             <h1>🍽️ Bucky's Menu</h1>
@@ -44,7 +66,7 @@
                         <input type="password" id="signin-password" required>
                     </div>
                     <button type="submit" class="auth-btn">Sign In</button>
-                    <div class="auth-divider">or</div>
+                    <div class="auth-divider"><span>or</span></div>
                     <button type="button" id="google-signin" class="google-btn">
                         Continue with Google
                     </button>
@@ -66,7 +88,7 @@
                         <input type="password" id="signup-confirm" minlength="6" required>
                     </div>
                     <button type="submit" class="auth-btn">Create Account</button>
-                    <div class="auth-divider">or</div>
+                    <div class="auth-divider"><span>or</span></div>
                     <button type="button" id="google-signup" class="google-btn">
                         Continue with Google
                     </button>
@@ -75,17 +97,6 @@
 
             <!-- User Dashboard (Hidden initially) -->
             <div id="dashboard" class="hidden">
-                <!-- User Info Section -->
-                <section class="user-section">
-                    <div class="user-info">
-                        <h2>Welcome, <span id="user-email"></span>!</h2>
-                        <div class="user-actions">
-                            <a href="/settings.html" class="settings-link">⚙️ Settings</a>
-                            <button id="signout-btn" class="secondary-btn">Sign Out</button>
-                        </div>
-                    </div>
-                </section>
-
             <!-- Current Subscriptions Section -->
             <section class="subscriptions-section">
                 <h2>Your Subscriptions</h2>

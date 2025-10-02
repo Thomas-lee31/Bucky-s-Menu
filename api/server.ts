@@ -11,7 +11,27 @@ const prisma = new PrismaClient();
 const subscriptionService = new SubscriptionService();
 const authService = new AuthService();
 
-app.use(cors());
+// CORS configuration for separate frontend deployment
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:5173',
+  process.env.FRONTEND_URL, // Set this in Render env vars
+].filter(Boolean);
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, Postman, etc.)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
+
 app.use(express.json());
 
 // Debug middleware to log all requests

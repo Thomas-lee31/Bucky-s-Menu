@@ -4,16 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Settings - Bucky's Menu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-brand">
+                <a href="/">🍽️ Bucky's Menu</a>
+            </div>
+            <div class="navbar-menu">
+                <div id="navbar-user" class="navbar-user">
+                    <span id="navbar-email" class="navbar-email"></span>
+                    <a href="/settings.html" class="navbar-link navbar-link-active">⚙️ Settings</a>
+                    <button id="navbar-signout" class="navbar-btn">Sign Out</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
     <div class="container">
         <header>
             <h1>⚙️ Settings</h1>
             <p>Customize your Bucky's Menu experience</p>
-            <nav class="header-nav">
-                <a href="/" class="nav-link">← Back to Home</a>
-            </nav>
         </header>
 
         <main>
@@ -25,14 +41,6 @@
 
             <!-- Settings Dashboard -->
             <div id="settings-dashboard" class="hidden">
-                <!-- User Info -->
-                <section class="user-section">
-                    <div class="user-info">
-                        <h2>Account: <span id="user-email"></span></h2>
-                        <button id="signout-btn" class="secondary-btn">Sign Out</button>
-                    </div>
-                </section>
-
                 <!-- Notification Settings -->
                 <section class="settings-section">
                     <h2>🔔 Email Notifications</h2>

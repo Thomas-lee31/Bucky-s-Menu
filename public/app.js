@@ -1,6 +1,8 @@
 class BuckyMenuApp {
     constructor() {
-        this.apiUrl = '';
+        this.apiUrl = window.location.hostname === 'localhost'
+            ? ''
+            : 'https://buckys-menu-api.onrender.com'; // Update with your Render URL
         this.searchTimeout = null;
         this.currentUser = null;
         this.accessToken = null;
@@ -111,7 +113,11 @@ class BuckyMenuApp {
 
     setCurrentUser(user) {
         this.currentUser = user;
-        document.getElementById('user-email').textContent = user.email;
+
+        // Update navbar
+        document.getElementById('navbar-email').textContent = user.email;
+        document.getElementById('navbar-user').classList.remove('hidden');
+        document.getElementById('navbar-auth').classList.add('hidden');
 
         // Show dashboard, hide auth
         document.getElementById('auth-section').classList.add('hidden');
@@ -125,6 +131,10 @@ class BuckyMenuApp {
         this.currentUser = null;
         this.accessToken = null;
         localStorage.removeItem('supabase_access_token');
+
+        // Update navbar
+        document.getElementById('navbar-user').classList.add('hidden');
+        document.getElementById('navbar-auth').classList.remove('hidden');
 
         // Clear Supabase session too (but only if client is ready)
         if (window.supabase && window.supabase.auth && window.supabase.auth.signOut) {
@@ -141,6 +151,15 @@ class BuckyMenuApp {
     }
 
     bindEvents() {
+        // Navbar events
+        document.getElementById('navbar-signin').addEventListener('click', () => {
+            this.scrollToAuth();
+        });
+
+        document.getElementById('navbar-signout').addEventListener('click', () => {
+            this.handleSignOut();
+        });
+
         // Auth tabs
         document.getElementById('signin-tab').addEventListener('click', () => {
             this.switchAuthTab('signin');
@@ -168,11 +187,6 @@ class BuckyMenuApp {
 
         document.getElementById('google-signup').addEventListener('click', () => {
             this.handleGoogleAuth();
-        });
-
-        // Sign out
-        document.getElementById('signout-btn').addEventListener('click', () => {
-            this.handleSignOut();
         });
 
         // Food search autocomplete
@@ -638,11 +652,13 @@ class BuckyMenuApp {
 
     promptSignIn(foodName) {
         this.showToast(`Sign in to subscribe to ${foodName} and get notifications when it's available!`, 'info');
+        this.scrollToAuth();
+    }
 
-        // Scroll to auth section
+    scrollToAuth() {
         const authSection = document.getElementById('auth-section');
         if (authSection) {
-            authSection.scrollIntoView({ behavior: 'smooth' });
+            authSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     }
 }

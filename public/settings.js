@@ -100,8 +100,8 @@ class SettingsApp {
         document.getElementById('auth-required').classList.add('hidden');
         document.getElementById('settings-dashboard').classList.remove('hidden');
 
-        // Show user info
-        document.getElementById('user-email').textContent = this.currentUser.email;
+        // Update navbar
+        document.getElementById('navbar-email').textContent = this.currentUser.email;
 
         // Load and display settings
         await this.loadSettings();
@@ -149,8 +149,8 @@ class SettingsApp {
     }
 
     bindEvents() {
-        // Sign out button
-        document.getElementById('signout-btn').addEventListener('click', () => {
+        // Navbar sign out button
+        document.getElementById('navbar-signout').addEventListener('click', () => {
             this.handleSignOut();
         });
 
