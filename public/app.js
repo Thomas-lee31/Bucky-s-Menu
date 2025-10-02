@@ -1,8 +1,6 @@
 class BuckyMenuApp {
     constructor() {
-        this.apiUrl = window.location.hostname === 'localhost'
-            ? ''
-            : 'https://buckys-menu-api.onrender.com'; // Update with your Render URL
+        this.apiUrl = ''; // Always use same domain (backend serves frontend)
         this.searchTimeout = null;
         this.currentUser = null;
         this.accessToken = null;
