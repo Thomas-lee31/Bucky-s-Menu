@@ -8,8 +8,6 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables. Please set SUPABASE_URL and SUPABASE_ANON_KEY');
 }
 
-const prisma = new PrismaClient();
-
 export interface AuthUser {
   id: string;
   email: string;
@@ -33,9 +31,11 @@ export interface AuthResponse {
 
 export class AuthService {
   private supabase: SupabaseClient;
+  private prisma: PrismaClient;
 
-  constructor() {
+  constructor(prismaClient: PrismaClient) {
     this.supabase = createClient(supabaseUrl!, supabaseAnonKey!);
+    this.prisma = prismaClient;
   }
 
   async signUp(data: SignUpData): Promise<AuthResponse> {
@@ -198,25 +198,25 @@ export class AuthService {
   private async createOrGetUser(supabaseUser: User) {
     try {
       // Try to find existing user by supabaseId
-      let user = await prisma.user.findUnique({
+      let user = await this.prisma.user.findUnique({
         where: { supabaseId: supabaseUser.id }
       });
 
       if (!user) {
         // Try to find by email (for migration purposes)
-        const existingEmailUser = await prisma.user.findUnique({
+        const existingEmailUser = await this.prisma.user.findUnique({
           where: { email: supabaseUser.email! }
         });
 
         if (existingEmailUser) {
           // Update existing user with supabaseId
-          user = await prisma.user.update({
+          user = await this.prisma.user.update({
             where: { id: existingEmailUser.id },
             data: { supabaseId: supabaseUser.id }
           });
         } else {
           // Create new user
-          user = await prisma.user.create({
+          user = await this.prisma.user.create({
             data: {
               supabaseId: supabaseUser.id,
               email: supabaseUser.email!,

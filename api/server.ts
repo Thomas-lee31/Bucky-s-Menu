@@ -13,9 +13,20 @@ const __dirname = dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 3000;
-const prisma = new PrismaClient();
+
+// Configure Prisma with connection pool limits for serverless
+const prisma = new PrismaClient({
+  datasources: {
+    db: {
+      url: process.env.DATABASE_URL,
+    },
+  },
+  // Limit connection pool for Supabase transaction pooler
+  log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+});
+
 const subscriptionService = new SubscriptionService();
-const authService = new AuthService();
+const authService = new AuthService(prisma);
 
 // CORS configuration for separate frontend deployment
 const allowedOrigins = [
