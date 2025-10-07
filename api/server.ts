@@ -22,11 +22,12 @@ const getDatabaseUrl = () => {
   }
 
   // Add connection pooling parameters for Supabase transaction pooler
-  // These optimize for serverless/stateless environments like Render
+  // These optimize for serverless/stateless environments like Vercel
   const url = new URL(baseUrl);
   url.searchParams.set('connection_limit', '1');
   url.searchParams.set('pool_timeout', '10');
   url.searchParams.set('connect_timeout', '10');
+  url.searchParams.set('pgbouncer', 'true'); // Disable prepared statements for connection poolers
 
   return url.toString();
 };
