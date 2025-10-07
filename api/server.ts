@@ -21,15 +21,12 @@ const getDatabaseUrl = () => {
     throw new Error('DATABASE_URL is not defined');
   }
 
+  // Check if URL already has query parameters
+  const separator = baseUrl.includes('?') ? '&' : '?';
+
   // Add connection pooling parameters for Supabase transaction pooler
   // These optimize for serverless/stateless environments like Vercel
-  const url = new URL(baseUrl);
-  url.searchParams.set('connection_limit', '1');
-  url.searchParams.set('pool_timeout', '10');
-  url.searchParams.set('connect_timeout', '10');
-  url.searchParams.set('pgbouncer', 'true'); // Disable prepared statements for connection poolers
-
-  return url.toString();
+  return `${baseUrl}${separator}pgbouncer=true&connection_limit=1&pool_timeout=10`;
 };
 
 // Configure Prisma with connection pool limits for serverless
