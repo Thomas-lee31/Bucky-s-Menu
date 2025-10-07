@@ -4,8 +4,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { PrismaClient } from '@prisma/client';
-import { SubscriptionService } from '../utils/subscriptionService';
-import { AuthService } from '../utils/authService';
+import { SubscriptionService } from '../utils/subscriptionService.js';
+import { AuthService } from '../utils/authService.js';
 
 // ES module equivalent of __dirname
 const __filename = fileURLToPath(import.meta.url);
