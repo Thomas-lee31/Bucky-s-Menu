@@ -21,7 +21,8 @@
     "tsx": "^4.20.3"
   },
   "scripts": {
-    "build": "npx prisma generate",
+    "postinstall": "prisma generate",
+    "build": "prisma generate",
     "start": "tsx api/server.ts",
     "job:daily": "tsx scripts/dailyMenuJob.ts",
     "job:notifications": "tsx scripts/notificationJob.ts",

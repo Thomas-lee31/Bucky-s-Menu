@@ -42,16 +42,18 @@ const prisma = new PrismaClient({
   log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
 });
 
-// Graceful shutdown
-process.on('SIGINT', async () => {
-  await prisma.$disconnect();
-  process.exit(0);
-});
+// Graceful shutdown (only for non-serverless)
+if (process.env.VERCEL !== '1') {
+  process.on('SIGINT', async () => {
+    await prisma.$disconnect();
+    process.exit(0);
+  });
 
-process.on('SIGTERM', async () => {
-  await prisma.$disconnect();
-  process.exit(0);
-});
+  process.on('SIGTERM', async () => {
+    await prisma.$disconnect();
+    process.exit(0);
+  });
+}
 
 const subscriptionService = new SubscriptionService();
 const authService = new AuthService(prisma);
@@ -589,19 +591,6 @@ app.use((req, res) => {
 if (process.env.VERCEL !== '1') {
   app.listen(port, () => {
     console.log(`🚀 API server running on port ${port}`);
-  });
-
-  // Graceful shutdown
-  process.on('SIGTERM', async () => {
-    console.log('SIGTERM received, shutting down gracefully');
-    await prisma.$disconnect();
-    process.exit(0);
-  });
-
-  process.on('SIGINT', async () => {
-    console.log('SIGINT received, shutting down gracefully');
-    await prisma.$disconnect();
-    process.exit(0);
   });
 }
 
