@@ -87,8 +87,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Serve static files from public directory
-app.use(express.static(path.join(__dirname, '../public')));
+// Static files are served by Vercel from /public directory automatically
 
 // Health check with database connectivity test
 app.get('/health', async (req, res) => {
