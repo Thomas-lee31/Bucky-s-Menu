@@ -14,28 +14,8 @@ const __dirname = dirname(__filename);
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Configure DATABASE_URL with connection pooling parameters for serverless
-const getDatabaseUrl = () => {
-  const baseUrl = process.env.DATABASE_URL;
-  if (!baseUrl) {
-    throw new Error('DATABASE_URL is not defined');
-  }
-
-  // Check if URL already has query parameters
-  const separator = baseUrl.includes('?') ? '&' : '?';
-
-  // Add connection pooling parameters for Supabase transaction pooler
-  // These optimize for serverless/stateless environments like Vercel
-  return `${baseUrl}${separator}pgbouncer=true&connection_limit=1&pool_timeout=10`;
-};
-
 // Configure Prisma with connection pool limits for serverless
 const prisma = new PrismaClient({
-  datasources: {
-    db: {
-      url: getDatabaseUrl(),
-    },
-  },
   // Limit connection pool for Supabase transaction pooler
   log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
 });
