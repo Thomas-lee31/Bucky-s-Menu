@@ -117,6 +117,12 @@ class BuckyMenuApp {
         document.getElementById('navbar-user').classList.remove('hidden');
         document.getElementById('navbar-auth').classList.add('hidden');
 
+        // Hide the search info message
+        const searchInfo = document.querySelector('.search-info');
+        if (searchInfo) {
+            searchInfo.classList.add('hidden');
+        }
+
         // Show dashboard, hide auth
         document.getElementById('auth-section').classList.add('hidden');
         document.getElementById('dashboard').classList.remove('hidden');
@@ -133,6 +139,12 @@ class BuckyMenuApp {
         // Update navbar
         document.getElementById('navbar-user').classList.add('hidden');
         document.getElementById('navbar-auth').classList.remove('hidden');
+
+        // Show the search info message
+        const searchInfo = document.querySelector('.search-info');
+        if (searchInfo) {
+            searchInfo.classList.remove('hidden');
+        }
 
         // Clear Supabase session too (but only if client is ready)
         if (window.supabase && window.supabase.auth && window.supabase.auth.signOut) {
