@@ -41,6 +41,8 @@ const prisma = new PrismaClient({
   },
   // Limit connection pool for Supabase transaction pooler
   log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+  // Disable statement caching for PgBouncer transaction mode
+  adapter: undefined,
 });
 
 // Graceful shutdown (only for non-serverless)
