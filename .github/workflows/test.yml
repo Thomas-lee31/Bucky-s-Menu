@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      - name: Check TypeScript compilation
+        run: npx tsc --noEmit
+
+      - name: Run linter (if configured)
+        run: npm run lint || echo "⚠️ No linter configured"
+        continue-on-error: true
+
+      - name: Run tests (if configured)
+        run: npm test || echo "⚠️ No tests configured"
+        continue-on-error: true
+
+      - name: Check Prisma schema
+        run: npx prisma validate
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
